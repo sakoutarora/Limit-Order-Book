@@ -1,5 +1,5 @@
 from collections import OrderedDict
-
+from src.models.order import Order
 
 class PriceLevel:
     """Aggregate representing a price level with queued orders (FIFO)."""
@@ -21,7 +21,7 @@ class PriceLevel:
         if first_order.remaining_qty == 0:
             del self.orders[first_id]
 
-    def cancel_order(self, order_id):
+    def cancel_order(self, order_id) -> Order:
         """Cancel order by ID in O(1)."""
         if order_id in self.orders:
             order = self.orders.pop(order_id)

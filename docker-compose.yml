@@ -2,7 +2,7 @@ version: "3.8"
 
 services:
   node1:
-    build: .
+    build: ./api/.
     container_name: node1
     command:
       [
@@ -19,7 +19,7 @@ services:
       - raftnet
 
   node2:
-    build: .
+    build: ./engine/.
     container_name: node2
     command:
       [

@@ -6,8 +6,9 @@ from src.persistance.wal import WAL
 from src.persistance.snapshot import SnapshotManager
 import asyncio
 from src.db.lob_db import LobDb
-
-
+from datetime import datetime
+import traceback
+from src.models.order import Order
 class OrderGrpcController(lob_pb2_grpc.OrderServiceServicer):
     def __init__(self, wal: WAL, snaphost_manager: SnapshotManager):
         self._db = LobDb()
@@ -25,7 +26,6 @@ class OrderGrpcController(lob_pb2_grpc.OrderServiceServicer):
         await self.recover()
         return self
 
-
     async def recover(self):
         print("Recpvering .. ")
         snap_seq, state = await self.snaphost_manager.load_latest()
@@ -37,7 +37,6 @@ class OrderGrpcController(lob_pb2_grpc.OrderServiceServicer):
             data = rec["data"]
             await self._apply_operation_no_wal(op, data)
         print("Recovery complete")
-
 
     async def _maybe_snapshot(self):
         if self._op_count_since_snapshot >= self._snapshot_every_ops:
@@ -57,54 +56,96 @@ class OrderGrpcController(lob_pb2_grpc.OrderServiceServicer):
         if op == "submit":
             await self.service.submit_order(**data, skip_wal=True)
         elif op == "modify":
-            await self.service.modify_order(**data, skip_wal=True)
+            await self.service.modify_oder(**data, skip_wal=True)
         elif op == "cancel":
             await self.service.cancel_order(**data, skip_wal=True)
         else:
             pass
     
-
-    async def SubmitOrder(self, request_iterator, context):
-        async for order_req in request_iterator:            
-            result = await self.service.submit_order(
-                ticker=order_req.tikcer,
-                side=int(order_req.type),
-                price=order_req.price,
-                qty=order_req.quantity
+    async def SubmitOrder(self, request, context):
+        try:
+            await self._maybe_snapshot()
+            order, trades = await self.service.submit_order(
+                ticker=request.tikcer,
+                side=int(request.type),
+                price=request.price,
+                qty=request.quantity
             )
-            await self._maybe_snapshot()
+            
+            response_trades = []
+            for trade in trades:
+                response_trades.append(lob_pb2.Trade(
+                    unique_id=str(trade.unique_id),
+                    timestamp=int(datetime.now().timestamp() * 1000),
+                    price=trade.price,
+                    qty=int(trade.qty),
+                    bid_order_id=trade.bid_order_id,
+                    ask_order_id=trade.ask_order_id
+                ))
 
-        return lob_pb2.OrderResponse(
-            status="ok",
-            message="All streamed orders processed successfully",
-            order_id=0
-        )
-
-    async def ModifyOrder(self, request_iterator, context):
-        for mod_req in request_iterator:
-            result = self.service.modify_order(
-                mod_req.order_id,
-                mod_req.new_price,
-                mod_req.new_quantity
+            return lob_pb2.OrderResponse(
+                status="ok",
+                order_id=str(order.id),
+                trades=response_trades
             )
-            await self._maybe_snapshot()
-        return lob_pb2.OrderResponse(
-            status="ok",
-            message="All modifications applied",
-            order_id=0
-        )
-
-    async def CancelOrder(self, request_iterator, context):
-        for cancel_req in request_iterator:
-            result = self.service.cancel_order(cancel_req.order_id)
-            await self._maybe_snapshot()
-
-        return lob_pb2.OrderResponse(
-            status="ok",
-            message="All cancellations processed",
-            order_id=0
-        )
+        
+        except Exception as e:
+            traceback.print_exc()
+            raise e
     
+    async def ModifyOrder(self, request, context):
+        try:
+            await self._maybe_snapshot()
+            order, trades = self.service.modify_oder(
+                order_id=request.order_id,
+                new_price=request.new_price,
+                new_quantity=request.new_quantity
+            )
+            
+            response_trades = []
+            for trade in trades:
+                response_trades.append(lob_pb2.Trade(
+                    unique_id=str(trade.unique_id),
+                    timestamp=int(datetime.now().timestamp() * 1000),
+                    price=trade.price,
+                    qty=int(trade.qty),
+                    bid_order_id=trade.bid_order_id,
+                    ask_order_id=trade.ask_order_id
+                ))
+
+            return lob_pb2.OrderResponse(
+                status="ok",
+                order_id=str(order.id),
+                trades=response_trades
+            )
+        
+        except Exception as e:
+            traceback.print_exc()
+            raise e
+
+    async def CancelOrder(self, request, context):
+
+        try:
+            await self._maybe_snapshot()
+            order: Order = self.service.cancel_order(
+                order_id=request.order_id
+            )
+            if order is None:
+                return lob_pb2.OrderResponse(
+                    status="error",
+                    message="Order not found",
+                    order_id=order.id
+                )
+            
+            return lob_pb2.OrderResponse(
+                status="ok",
+                order_id=str(order.id)
+            )
+            
+        except Exception as e:
+            traceback.print_exc()
+            raise e
+
     async def GetLob(self, request, context):
         lob = await self.service.get_lob(request.ticker)
         asks_level = []
@@ -116,7 +157,6 @@ class OrderGrpcController(lob_pb2_grpc.OrderServiceServicer):
                     total_qty=val.total_qty
                 ))
 
-            
             for key, val in lob.bids.items():
                 bids_level.append(lob_pb2.PriceLevel(
                     price=key/100.0,

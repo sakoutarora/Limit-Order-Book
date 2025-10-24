@@ -25,9 +25,9 @@ class LobDb:
         async with self._lock:
             self.lobs[ticker] = lob
 
-    async def get_lob(self, ticker: str):
+    async def get_lob(self, ticker: str) -> LimitOrderBook:
         async with self._lock:
-            return self.lobs.get(ticker)
+            return self.lobs.get(ticker, None)
         
     async def get_serializable_state(self):
         async with self._lock:

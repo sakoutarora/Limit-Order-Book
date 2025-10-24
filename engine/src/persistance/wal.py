@@ -75,23 +75,3 @@ class WAL:
             with open(self.path, "w", encoding="utf-8") as f:
                 f.truncate(0)
             self._last_seq = 0
-
-    def logged(self, op: str, before: bool = True):
-        def decorator(func: Callable[..., Coroutine[Any, Any, Any]]):
-            @wraps(func)
-            async def wrapper(instance, *args, **kwargs):
-                # Prepare log data (args + kwargs)
-                data = {"args": args, "kwargs": kwargs}
-
-                if before:
-                    seq = await self.append(op, data)
-                    result = await func(instance, *args, **kwargs)
-                    return {"seq": seq, "result": result}
-                else:
-                    result = await func(instance, *args, **kwargs)
-                    seq = await self.append(op, {"args": args, "kwargs": kwargs, "result": result})
-                    return {"seq": seq, "result": result}
-
-            return wrapper
-
-        return decorator

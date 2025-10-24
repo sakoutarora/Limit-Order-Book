@@ -5,8 +5,8 @@ import uuid
 class Order:
     """Entity representing a single order in the LOB."""
 
-    def __init__(self, side: int, price_c: int, quantity: int, remaining_qty=None, order_id=None):
-        self.id = order_id or "o_" + uuid.uuid4().hex[:12]
+    def __init__(self, side: int, price_c: int, quantity: int, remaining_qty=None, order_id=None, ticker=None):
+        self.id = order_id or str(ticker) + "_" + uuid.uuid4().hex[:12]
         self.side = side  # 1 = buy, -1 = sell
         self.price = price_c
         self.original_qty = quantity
@@ -15,6 +15,7 @@ class Order:
         self.trade_value_acc = 0  
         self.timestamp = time.time()
         self.alive = True
+        self.ticker = ticker
 
     def record_trade(self, price_c: int, qty: int) -> None:
         """Record a trade execution."""

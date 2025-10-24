@@ -3,7 +3,7 @@
 import grpc
 import warnings
 
-from src.proto import lob_pb2 as src_dot_proto_dot_lob__pb2
+from app.proto import lob_pb2 as app_dot_proto_dot_lob__pb2
 
 GRPC_GENERATED_VERSION = '1.75.0'
 GRPC_VERSION = grpc.__version__
@@ -18,7 +18,7 @@ except ImportError:
 if _version_not_supported:
     raise RuntimeError(
         f'The grpc package installed is at version {GRPC_VERSION},'
-        + f' but the generated code in src/proto/lob_pb2_grpc.py depends on'
+        + f' but the generated code in app/proto/lob_pb2_grpc.py depends on'
         + f' grpcio>={GRPC_GENERATED_VERSION}.'
         + f' Please upgrade your grpc module to grpcio>={GRPC_GENERATED_VERSION}'
         + f' or downgrade your generated code using grpcio-tools<={GRPC_VERSION}.'
@@ -36,23 +36,23 @@ class OrderServiceStub(object):
         """
         self.SubmitOrder = channel.unary_unary(
                 '/orders.OrderService/SubmitOrder',
-                request_serializer=src_dot_proto_dot_lob__pb2.OrderRequest.SerializeToString,
-                response_deserializer=src_dot_proto_dot_lob__pb2.OrderResponse.FromString,
+                request_serializer=app_dot_proto_dot_lob__pb2.OrderRequest.SerializeToString,
+                response_deserializer=app_dot_proto_dot_lob__pb2.OrderResponse.FromString,
                 _registered_method=True)
         self.ModifyOrder = channel.unary_unary(
                 '/orders.OrderService/ModifyOrder',
-                request_serializer=src_dot_proto_dot_lob__pb2.ModifyOrderRequest.SerializeToString,
-                response_deserializer=src_dot_proto_dot_lob__pb2.OrderResponse.FromString,
+                request_serializer=app_dot_proto_dot_lob__pb2.ModifyOrderRequest.SerializeToString,
+                response_deserializer=app_dot_proto_dot_lob__pb2.OrderResponse.FromString,
                 _registered_method=True)
         self.CancelOrder = channel.unary_unary(
                 '/orders.OrderService/CancelOrder',
-                request_serializer=src_dot_proto_dot_lob__pb2.CancelOrderRequest.SerializeToString,
-                response_deserializer=src_dot_proto_dot_lob__pb2.OrderResponse.FromString,
+                request_serializer=app_dot_proto_dot_lob__pb2.CancelOrderRequest.SerializeToString,
+                response_deserializer=app_dot_proto_dot_lob__pb2.OrderResponse.FromString,
                 _registered_method=True)
         self.GetLob = channel.unary_unary(
                 '/orders.OrderService/GetLob',
-                request_serializer=src_dot_proto_dot_lob__pb2.LobRequest.SerializeToString,
-                response_deserializer=src_dot_proto_dot_lob__pb2.LobResponse.FromString,
+                request_serializer=app_dot_proto_dot_lob__pb2.LobRequest.SerializeToString,
+                response_deserializer=app_dot_proto_dot_lob__pb2.LobResponse.FromString,
                 _registered_method=True)
 
 
@@ -88,23 +88,23 @@ def add_OrderServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
             'SubmitOrder': grpc.unary_unary_rpc_method_handler(
                     servicer.SubmitOrder,
-                    request_deserializer=src_dot_proto_dot_lob__pb2.OrderRequest.FromString,
-                    response_serializer=src_dot_proto_dot_lob__pb2.OrderResponse.SerializeToString,
+                    request_deserializer=app_dot_proto_dot_lob__pb2.OrderRequest.FromString,
+                    response_serializer=app_dot_proto_dot_lob__pb2.OrderResponse.SerializeToString,
             ),
             'ModifyOrder': grpc.unary_unary_rpc_method_handler(
                     servicer.ModifyOrder,
-                    request_deserializer=src_dot_proto_dot_lob__pb2.ModifyOrderRequest.FromString,
-                    response_serializer=src_dot_proto_dot_lob__pb2.OrderResponse.SerializeToString,
+                    request_deserializer=app_dot_proto_dot_lob__pb2.ModifyOrderRequest.FromString,
+                    response_serializer=app_dot_proto_dot_lob__pb2.OrderResponse.SerializeToString,
             ),
             'CancelOrder': grpc.unary_unary_rpc_method_handler(
                     servicer.CancelOrder,
-                    request_deserializer=src_dot_proto_dot_lob__pb2.CancelOrderRequest.FromString,
-                    response_serializer=src_dot_proto_dot_lob__pb2.OrderResponse.SerializeToString,
+                    request_deserializer=app_dot_proto_dot_lob__pb2.CancelOrderRequest.FromString,
+                    response_serializer=app_dot_proto_dot_lob__pb2.OrderResponse.SerializeToString,
             ),
             'GetLob': grpc.unary_unary_rpc_method_handler(
                     servicer.GetLob,
-                    request_deserializer=src_dot_proto_dot_lob__pb2.LobRequest.FromString,
-                    response_serializer=src_dot_proto_dot_lob__pb2.LobResponse.SerializeToString,
+                    request_deserializer=app_dot_proto_dot_lob__pb2.LobRequest.FromString,
+                    response_serializer=app_dot_proto_dot_lob__pb2.LobResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -132,8 +132,8 @@ class OrderService(object):
             request,
             target,
             '/orders.OrderService/SubmitOrder',
-            src_dot_proto_dot_lob__pb2.OrderRequest.SerializeToString,
-            src_dot_proto_dot_lob__pb2.OrderResponse.FromString,
+            app_dot_proto_dot_lob__pb2.OrderRequest.SerializeToString,
+            app_dot_proto_dot_lob__pb2.OrderResponse.FromString,
             options,
             channel_credentials,
             insecure,
@@ -159,8 +159,8 @@ class OrderService(object):
             request,
             target,
             '/orders.OrderService/ModifyOrder',
-            src_dot_proto_dot_lob__pb2.ModifyOrderRequest.SerializeToString,
-            src_dot_proto_dot_lob__pb2.OrderResponse.FromString,
+            app_dot_proto_dot_lob__pb2.ModifyOrderRequest.SerializeToString,
+            app_dot_proto_dot_lob__pb2.OrderResponse.FromString,
             options,
             channel_credentials,
             insecure,
@@ -186,8 +186,8 @@ class OrderService(object):
             request,
             target,
             '/orders.OrderService/CancelOrder',
-            src_dot_proto_dot_lob__pb2.CancelOrderRequest.SerializeToString,
-            src_dot_proto_dot_lob__pb2.OrderResponse.FromString,
+            app_dot_proto_dot_lob__pb2.CancelOrderRequest.SerializeToString,
+            app_dot_proto_dot_lob__pb2.OrderResponse.FromString,
             options,
             channel_credentials,
             insecure,
@@ -213,8 +213,8 @@ class OrderService(object):
             request,
             target,
             '/orders.OrderService/GetLob',
-            src_dot_proto_dot_lob__pb2.LobRequest.SerializeToString,
-            src_dot_proto_dot_lob__pb2.LobResponse.FromString,
+            app_dot_proto_dot_lob__pb2.LobRequest.SerializeToString,
+            app_dot_proto_dot_lob__pb2.LobResponse.FromString,
             options,
             channel_credentials,
             insecure,
