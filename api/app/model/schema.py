@@ -6,6 +6,7 @@ class PlaceOrderIn(BaseModel):
     quantity: conint(gt=0)
     price: confloat(gt=0)
     side: int
+    ticker: str
 
     @validator("side")
     def side_valid(cls, v):

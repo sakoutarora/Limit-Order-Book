@@ -50,7 +50,7 @@ class OrderEngine:
         ticker = find_ticker_from_order_id(order_id)
         lob = await self._db.get_lob(ticker)
         if lob:
-            return self._lob.cancel_oder(order_id)
+            return self._lob.cancel_oder(lob, order_id)
         return None
 
     async def get_lob(self, ticker: str) -> LimitOrderBook:

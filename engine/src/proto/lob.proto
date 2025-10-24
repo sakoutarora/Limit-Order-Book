@@ -38,7 +38,7 @@ message ModifyOrderRequest {
 }
 
 message CancelOrderRequest {
-  int64 order_id = 1;
+  string order_id = 1;
 }
 message Trade {
   string unique_id = 1;
@@ -53,5 +53,5 @@ message OrderResponse {
   string status = 1;
   string order_id = 2;
   repeated Trade trades = 3;
-  
+
 }

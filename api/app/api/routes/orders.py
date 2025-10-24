@@ -8,7 +8,7 @@ router = APIRouter(prefix="/orders", tags=["Orders"])
 @router.post("/", response_model=PlaceOrderOut)
 async def place_order(data: PlaceOrderIn):
     try:
-        resp = await grpc_client.submit_order(data.price, data.quantity, data.side)
+        resp = await grpc_client.submit_order(data.price, data.quantity, str(data.side), data.ticker)
         order_id = getattr(resp, "order_id", None)
         return PlaceOrderOut(order_id=order_id)
     except Exception as e:

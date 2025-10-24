@@ -40,7 +40,7 @@ class GRPCClient:
         )
         return await stub.ModifyOrder(request)
 
-    async def cancel_order(self, order_id: int):
+    async def cancel_order(self, order_id: str):
         """Cancel an order by ID."""
         stub = await self.ensure_stub()
         request = lob_pb2.CancelOrderRequest(order_id=order_id)

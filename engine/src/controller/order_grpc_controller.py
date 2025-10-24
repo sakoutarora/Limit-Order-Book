@@ -127,14 +127,13 @@ class OrderGrpcController(lob_pb2_grpc.OrderServiceServicer):
 
         try:
             await self._maybe_snapshot()
-            order: Order = self.service.cancel_order(
+            order: Order = await self.service.cancel_order(
                 order_id=request.order_id
             )
             if order is None:
                 return lob_pb2.OrderResponse(
                     status="error",
-                    message="Order not found",
-                    order_id=order.id
+                    message="Order not found"
                 )
             
             return lob_pb2.OrderResponse(
