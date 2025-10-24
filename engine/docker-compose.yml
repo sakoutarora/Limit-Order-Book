@@ -1,0 +1,49 @@
+version: "3.8"
+
+services:
+  node1:
+    build: .
+    container_name: node1
+    command:
+      [
+        "python",
+        "demo.py",
+        "raft_addr=node1:7000",
+        "flask_port=8000",
+        "partner_addrs=node2:7001,node3:7002"
+      ]
+    ports:
+      - "8000:8000"
+      - "7000:7000"
+    networks:
+      - raftnet
+
+  node2:
+    build: .
+    container_name: node2
+    command:
+      [
+        "python",
+        "demo.py",
+        "raft_addr=node2:7001",
+        "flask_port=8001",
+        "partner_addrs=node1:7000,node3:7002"
+      ]
+    ports:
+      - "8001:8001"
+      - "7001:7001"
+    networks:
+      - raftnet
+  node3:
+    build: .
+    container_name: node3
+    command: ["python", "demo.py", "raft_addr=node3:7002", "flask_port=8002", "partner_addrs=node1:7000,node2:7001"]
+    ports:
+      - "8002:8002"
+      - "7002:7002"
+    networks:
+      - raftnet
+
+networks:
+  raftnet:
+    driver: bridge
