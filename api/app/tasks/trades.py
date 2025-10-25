@@ -2,8 +2,6 @@
 from typing import Dict, Set, Any
 import asyncio
 import traceback
-from fastapi import WebSocket
-from app.core.redis import get_redis
 import redis.asyncio as redis
 
 REDIS_CHANNEL = "trades"
