@@ -90,3 +90,9 @@ Orders
 Market Data
     WS     /ws/trades              Fetch Realtime trades
     WS     /ws/book/{ticker}       Fetch current Limit Order Book for the ticker
+
+
+Exmaple to connect ws for trades 
+```bash
+ws://localhost:8000/ws/book/SBIN
+```
