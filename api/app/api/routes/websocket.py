@@ -3,10 +3,10 @@ from app.tasks.poller import register_client, unregister_client
 
 router = APIRouter(prefix="/ws", tags=["WebSocket"])
 
-@router.websocket("/book")
-async def book_ws(ws: WebSocket):
+@router.websocket("/book/{ticker}")
+async def book_ws(ws: WebSocket, ticker: str):
     await ws.accept()
-    register_client("book", ws)
+    register_client("book", ws, ticker)
     try:
         while True:
             await ws.receive_text()

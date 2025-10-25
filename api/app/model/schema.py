@@ -26,8 +26,8 @@ class PlaceOrderOut(BaseModel):
 
 
 class ModifyOrderIn(BaseModel):
-    order_id: str
     updated_price: confloat(gt=0)
+    updated_quantity: conint(gt=1)
 
 
 class CancelOrderOut(BaseModel):

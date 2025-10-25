@@ -8,6 +8,9 @@ class Settings(BaseSettings):
     GRPC_TARGET: str = os.getenv("GRPC_TARGET", "localhost:50051")
     SNAPSHOT_INTERVAL_SEC: float = 1.0
     LOG_LEVEL: str = os.getenv("LOG_LEVEL", "INFO")
+    REDIS_HOST: str = os.getenv("REDIS_HOST", "localhost")
+    REDIS_PORT: str = os.getenv("REDIS_PORT", "6379")
+    REDIS_DB: int = os.getenv("REDIS_DB", 1)
 
     class Config:
         env_file = ".env"
