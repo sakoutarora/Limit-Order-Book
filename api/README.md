@@ -17,6 +17,8 @@ The backend integrates with a **gRPC service**, **Redis**, and supports **Docker
 ---
 
 ## 📁 Project StructureProject Structure
+```bash
+
 api/
 ├── app/
 │   ├── main.py
@@ -40,7 +42,7 @@ api/
 ├── requirements.txt
 ├── Dockerfile
 ├── README.md
----
+```
 
 ## ✨ Features
 
@@ -64,7 +66,7 @@ api/
 ### 📥 Clone the Repository
 ```bash
 git clone git@github.com:sakoutarora/Limit-Order-Book.git
-cd trading-gateway-api
+cd api
 
 ### 📦 Install Dependencies
 pip install -r requirements.txt
@@ -72,7 +74,7 @@ pip install -r requirements.txt
 ### Generate Proto Code
 python -m grpc_tools.protoc -I. --python_out=. --grpc_python_out=. ./app/proto/lob.proto
 
-```bash
+```
 
 🌐 Access Points
 	•	REST API: http://localhost:8000

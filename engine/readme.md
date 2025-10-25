@@ -33,7 +33,7 @@ engine/
 │       └── snapshot.py
 ├── setup.py
 └── requirements.txt
-```bash
+```
 
 ⚙️ Models
 
@@ -41,13 +41,14 @@ engine/
 
 The LimitOrderBook class represents the entire LOB.
 
+```bash
 Structure:
 	•	Two sorted dictionaries:
 	•	bids: Sorted in descending order of price.
 	•	asks: Sorted in ascending order of price.
 	•	Each price level is represented by a PriceLevel object.
 	•	order_map: Maps order_id → Order instance.
-
+```
 
 💰 PriceLevel
 
@@ -65,4 +66,4 @@ python -m grpc_tools.protoc \
     -I. \
     --python_out=. \
     --grpc_python_out=. ./src/proto/lob.proto
-```bash
+```
