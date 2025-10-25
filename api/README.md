@@ -63,7 +63,7 @@ api/
 
 ### 📥 Clone the Repository
 ```bash
-git clone https://github.com/your-username/trading-gateway-api.git
+git clone git@github.com:sakoutarora/Limit-Order-Book.git
 cd trading-gateway-api
 
 ### 📦 Install Dependencies
