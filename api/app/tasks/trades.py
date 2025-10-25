@@ -42,12 +42,19 @@ async def broadcast_trade(trade_json: str):
     Broadcast trade update to all WebSocket clients connected to TRADE_WS.
     """
     disconnected = set()
-    for ws, _ in list(TRADE_WS):
+    for ws in list(TRADE_WS):
         try:
             await ws.send_text(trade_json)
         except Exception:
-            disconnected.add((ws, _))
+            disconnected.add(ws)
 
     # Remove dead clients
     for d in disconnected:
         TRADE_WS.discard(d)
+
+def register_client_trades(kind: str, ws):
+    TRADE_WS.add(ws)
+
+
+def unregister_client_trades(kind: str, ws):
+    TRADE_WS.discard(ws)

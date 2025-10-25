@@ -1,0 +1,9 @@
+fastapi
+grpcio
+grpcio-tools
+redis
+pydantic
+pydantic_settings
+uvicorn[standard]
+aiofiles
+orjson

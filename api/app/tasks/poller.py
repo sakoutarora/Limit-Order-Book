@@ -14,8 +14,8 @@ def register_client(kind: str, ws, ticker):
     BOOK_WS.add((ws, ticker))
 
 
-def unregister_client(kind: str, ws):
-    BOOK_WS.discard(ws)
+def unregister_client(kind: str, ws, ticker):
+    BOOK_WS.discard((ws, ticker))
 
 
 async def start_poller():
@@ -40,7 +40,7 @@ async def _poll():
                     await _broadcast(snapshot, ws)
                 except Exception as e:
                     traceback.print_exc()
-                    BOOK_WS.discard(ws)
+                    BOOK_WS.discard((ws, ticker))
             
             await asyncio.sleep(settings.SNAPSHOT_INTERVAL_SEC)
         except Exception as e:

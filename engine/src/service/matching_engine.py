@@ -37,7 +37,10 @@ class OrderEngine:
         ticker = find_ticker_from_order_id(order_id)
         lob = await self._db.get_lob(ticker)
         if lob:
-            new_lob, trades, order = await self._lob.modify_oder(lob, order_id, new_price, new_qty)
+            new_lob, trades, order = self._lob.modify_oder(lob, order_id, new_price, new_qty)
+            if not order:
+                return None, None
+            
             await self._db.set_lob(ticker, new_lob)
             return order, trades
         return None, None

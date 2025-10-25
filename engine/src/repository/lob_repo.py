@@ -84,10 +84,10 @@ class LimitOrderBookRepository:
 
     def modify_oder(self, lob: LimitOrderBook, order_id: str, new_price: float, new_qty: int) -> Tuple[LimitOrderBook, List[Trade], Order]:
         order = self.cancel_oder(lob, order_id)
-
-        order.price = to_cents(new_price)
-        order.remaining_qty = new_qty
-        order.original_qty = new_qty
-        new_lob, trades = self.add_order(lob, order)
-        
-        return new_lob, trades, order
+        if order:
+            order.price = to_cents(new_price)
+            order.remaining_qty = new_qty
+            order.original_qty = new_qty
+            new_lob, trades = self.add_order(lob, order)
+            return new_lob, trades, order
+        return None, None, None
