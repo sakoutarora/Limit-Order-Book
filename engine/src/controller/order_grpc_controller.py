@@ -42,7 +42,6 @@ class OrderGrpcController(lob_pb2_grpc.OrderServiceServicer):
         if self._op_count_since_snapshot >= self._snapshot_every_ops:
             async with self._lock:
                 state = await self._db.get_serializable_state()
-                print(state)
                 last_seq = self.wal._last_seq
                 await self.snaphost_manager.write_snapshot(state)
                 await self.wal.truncate()
@@ -174,3 +173,16 @@ class OrderGrpcController(lob_pb2_grpc.OrderServiceServicer):
         )
 
         return response
+    
+    async def GetOder(self, request, context) -> Order:
+        order: Order = await self.service.get_order(request.order_id)
+        if order:
+            return lob_pb2.Order(
+                order_id=str(order.id),
+                order_price=order.price,
+                order_quantity=order.original_qty,
+                traded_quantity=order.original_qty - order.remaining_qty,
+                order_alive=order.alive,
+                average_traded_price=order.avg_traded_price
+            )
+        return lob_pb2.Order() 

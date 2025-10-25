@@ -40,7 +40,6 @@ api/
 ├── requirements.txt
 ├── Dockerfile
 ├── README.md
-
 ---
 
 ## ✨ Features
@@ -68,8 +67,12 @@ git clone https://github.com/your-username/trading-gateway-api.git
 cd trading-gateway-api
 
 ### 📦 Install Dependencies
-```bash
 pip install -r requirements.txt
+
+### Generate Proto Code
+python -m grpc_tools.protoc -I. --python_out=. --grpc_python_out=. ./app/proto/lob.proto
+
+```bash
 
 🌐 Access Points
 	•	REST API: http://localhost:8000
@@ -85,6 +88,3 @@ Orders
 Market Data
     WS     /ws/trades              Fetch Realtime trades
     WS     /ws/book/{ticker}       Fetch current Limit Order Book for the ticker
-
-
-python -m grpc_tools.protoc -I. --python_out=. --grpc_python_out=. ./app/proto/lob.proto

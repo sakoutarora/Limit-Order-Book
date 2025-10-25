@@ -51,6 +51,12 @@ class GRPCClient:
         stub = await self.ensure_stub()
         request = lob_pb2.LobRequest(ticker=ticker)
         return await stub.GetLob(request)
+    
+    async def get_order(self, order_id: str):
+        """Fetch an order by ID."""
+        stub = await self.ensure_stub()
+        request = lob_pb2.CancelOrderRequest(order_id=order_id)
+        return await stub.GetOder(request)
 
     async def close(self):
         """Close the gRPC channel."""

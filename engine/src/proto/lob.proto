@@ -7,6 +7,7 @@ service OrderService {
   rpc ModifyOrder (ModifyOrderRequest) returns (OrderResponse);
   rpc CancelOrder (CancelOrderRequest) returns (OrderResponse);
   rpc GetLob (LobRequest) returns (LobResponse);
+  rpc GetOder (CancelOrderRequest) returns (Order);
 }
 
 message LobRequest {
@@ -53,5 +54,13 @@ message OrderResponse {
   string status = 1;
   string order_id = 2;
   repeated Trade trades = 3;
+}
 
+message Order {
+  string order_id = 1;
+  double order_price = 2;
+  int32 order_quantity = 3;
+  int32 traded_quantity = 4;
+  bool order_alive = 5;
+  double average_traded_price = 6;
 }

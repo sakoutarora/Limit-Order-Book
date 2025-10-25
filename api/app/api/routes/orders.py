@@ -45,3 +45,19 @@ async def modify_order(order_id: str, data: ModifyOrderIn, redis_client=Depends(
 async def cancel_order(order_id: str):
     resp = await grpc_client.cancel_order(order_id)
     return CancelOrderOut(success=getattr(resp, "success", True))
+
+
+@router.get("/{order_id}", response_model=OrderView)
+async def get_orders(order_id: str):
+    resp = await grpc_client.get_order(order_id)
+    if not resp:
+        raise HTTPException(status.HTTP_404_NOT_FOUND)
+    
+    return OrderView(
+        order_id=resp.order_id,
+        order_price=resp.order_price,
+        order_quantity=resp.order_quantity,
+        traded_quantity=resp.traded_quantity,
+        order_alive=resp.order_alive,
+        average_traded_price=resp.average_traded_price
+    )

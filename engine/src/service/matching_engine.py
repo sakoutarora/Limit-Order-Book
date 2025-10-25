@@ -61,3 +61,10 @@ class OrderEngine:
         if lob:
             return lob
         return None
+    
+    async def get_order(self, order_id: str) -> Order:
+        ticker = find_ticker_from_order_id(order_id)
+        lob = await self._db.get_lob(ticker)
+        if lob:
+            return self._lob.get_order(lob, order_id)
+        return None

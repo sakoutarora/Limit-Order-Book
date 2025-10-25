@@ -91,3 +91,6 @@ class LimitOrderBookRepository:
             new_lob, trades = self.add_order(lob, order)
             return new_lob, trades, order
         return None, None, None
+    
+    def get_order(self, lob: LimitOrderBook, order_id: str) -> Order:
+        return lob.order_map.get(order_id, None)
